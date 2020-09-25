@@ -11,5 +11,8 @@ pip install -r requirements.txt
 4. Add your Authentication Token and Playlist ID to spotify.py. (see spotify.py for relevant link to auth token)
 5. Run main.py !
 
+## Known Issues
+- Error returned when a certain song uses characters that can't be written into notepad
+
 ## Notes
 This is my first python project! If you have any helpful tips/advice I would be more than happy to hear them. Please don't hesitate to contact me for any reason.

@@ -1,6 +1,8 @@
 import requests
 from spotify import token, playlist
 from selenium import webdriver
+ops = webdriver.FirefoxOptions()
+ops.add_argument('-headless')
 
 
 # This function gets the json data from spotify
@@ -34,10 +36,14 @@ def format_into_list(data):
 
 # This function will use the above list and generate a list of lists with karaoke codes
 def get_karaoke_list(track_info_list):
-    driver = webdriver.Firefox()
-    success_list = ["Karaoke Codes:"]
+    driver = webdriver.Firefox(options=ops)
+    success_list = [",", "Karaoke Codes:"]
     fail_list = ["", "Failed to find:"]
     for track_info in track_info_list:
+        # This part is just for console logging
+        msg = "Loading track {} of {}".format(track_info_list.index(track_info) + 1, len(track_info_list))
+        print(msg)
+        # This part does the juicy stuff
         driver.get("https://www.clubdam.com/karaokesearch/?keyword={}".format(track_info))
         try:
             driver.implicitly_wait(3)
@@ -48,12 +54,13 @@ def get_karaoke_list(track_info_list):
             success_list.append([song_name, artist_name, code])
         except:
             fail_list.append(track_info)
+    driver.quit()
     return success_list + fail_list
 
 
 # This function will take the above list of lists and return a coherent string
 def stringify_results(karaoke_list):
-    string_list = []
+    string_list = [""]
     for items in karaoke_list:
         if type(items) is list:
             string_list.append(items[0] + ", " + items[1] + ": " + items[2])
@@ -71,7 +78,4 @@ def print_playlist_items():
 
 
 final = "\n".join(print_playlist_items())
-
-
-newFile = open("list.txt", "w")
-newFile.write(final)
+print(final)
